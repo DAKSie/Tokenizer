@@ -22,17 +22,9 @@ A wizard discovers a cave while the moon rises.
 Output:
 
 Tokens:
- A <Determiner>
- wizard <Noun>
- discovers <Verb>
- a <Determiner>
- cave <Noun>
- while the moon rises <Adverbial>
- . <Punctuation>
-
-
-
-
+Determiner(A), Noun(wizard), Verb(discovers), Determiner(a),
+Noun(cave), Conjunction(while), Determiner(the), Noun(moon),
+Verb(rises), Punctuation(.)
 
  
 ---
@@ -42,6 +34,22 @@ Tokens:
 ```bash
 dotnet build
 
+or with the C# compiler:
 csc Program.cs Tokenizer.cs CFG.cs Token.cs TokenType.csc
 
+Run
 dotnet run
+
+
+##📂 Project Structure
+
+├── CFG.cs          # Stores grammar definitions
+├── Token.cs        # Token class (word + TokenType)
+├── TokenType.cs    # Enum for token categories
+├── Tokenizer.cs    # Core tokenizer logic
+├── Program.cs      # Example usage
+└── README.md       # Documentation
+
+
+
+
