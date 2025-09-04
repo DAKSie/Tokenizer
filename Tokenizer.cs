@@ -11,25 +11,25 @@ namespace Tokenizer {
                 string multi = TryMatchMulti(words, i, CFG.Verbs);
                 if (multi != null) {
                     tokens.Add(new Token(multi, TokenType.Verb));
-                    i += multi.Split(' ').Length;
+                    i += multi.Split(' ').Length - 1;
                     continue;
                 }
                 multi = TryMatchMulti(words, i, CFG.Adverbials);
                 if (multi != null) {
                     tokens.Add(new Token(multi, TokenType.Adverbial));
-                    i += multi.Split(' ').Length;
+                    i += multi.Split(' ').Length - 1;
                     continue;
                 }
                 multi = TryMatchMulti(words, i, CFG.Locations);
                 if (multi != null) {
                     tokens.Add(new Token(multi, TokenType.Location));
-                    i += multi.Split(' ').Length;
+                    i += multi.Split(' ').Length - 1;
                     continue;
                 }
                 multi = TryMatchMulti(words, i, CFG.Conditions);
                 if (multi != null) {
                     tokens.Add(new Token(multi, TokenType.Condition));
-                    i += multi.Split(' ').Length;
+                    i += multi.Split(' ').Length - 1;
                     continue;
                 }
 

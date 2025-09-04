@@ -5,7 +5,7 @@ namespace Tokenizer {
     public static class CFG {
         // Determiners
         public static readonly HashSet<string> Determiners =
-            new() { "The", "A", "An", "My", "Her", "His" };
+            new() { "The", "A", "An", "My", "Her", "His", "a" };
         // Adjectives
         public static readonly HashSet<string> Adjectives =
             new() { "brave", "old", "young", "rusty", "enchanted", "mighty" };
@@ -13,7 +13,7 @@ namespace Tokenizer {
         public static readonly HashSet<string> Nouns =
             new() { "hero", "wizard", "knight", "dragon",
                     "princess", "treasure", "cave", "sword",
-                    "castle", "villager" };
+                    "castle", "villager", "horse" };
         // Verbs
         public static readonly HashSet<string> Verbs =
             new() { "fights", "searches for", "rescues",
@@ -25,12 +25,12 @@ namespace Tokenizer {
                     "near", "above", "beside" };
         // Adverbials
         public static readonly HashSet<string> Adverbials =
-            new() { "quickly", "silently", "with care", "without warning" };
+            new() { "while the moon rises", "quickly", "silently", "with care", "without warning" };
         // Locations
         public static readonly HashSet<string> Locations =
-            new() { "while the moon rises", "before the sun sets",
+            new() { "before the sun sets",
                     "at the castle", "on the mountain",
-                    "near the river", "inside the cave" };
+                    "near the river", "inside the cave", "in the dark forest" };
         // Conditions
         public static readonly HashSet<string> Conditions =
             new() { "because he is brave", "because she is clever",
