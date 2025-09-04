@@ -5,7 +5,7 @@ namespace Tokenizer {
     public static class CFG {
         // Determiners
         public static readonly HashSet<string> Determiners =
-            new() { "The", "A", "An", "My", "Her", "His", "a" };
+            new() { "The", "A", "An", "My", "Her", "His", "a" , "the", "an", "my", "her", "his",};
         // Adjectives
         public static readonly HashSet<string> Adjectives =
             new() { "brave", "old", "young", "rusty", "enchanted", "mighty" };
