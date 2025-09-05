@@ -81,6 +81,7 @@ namespace Tokenizer {
             return result;
         }
 
+        // this fucntion will try to see if the multi words tokens match anything in the test cases
         public static string TryMatchMulti(List<string> words, int start, HashSet<string> options) {
             foreach (var opt in options) {
                 var optWords = opt.Split(' ');
