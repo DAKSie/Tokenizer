@@ -22,6 +22,11 @@
             Console.WriteLine("Phase 2:");
 
             PhaseTwo(testCases);
+
+            Console.WriteLine("---------------------------------------------------------");
+    
+            Console.WriteLine("Enter Any Key to Continue.....");
+            Console.ReadLine();
         }
 
         public static void PhaseOne(List<string> testCases) {
