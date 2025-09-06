@@ -25,6 +25,8 @@ namespace Tokenizer {
         Condition,
         Conjunction,
         Punctuation,
+        Subject,
+        AdjectiveList,
 
         // Terminals (keywords/literals)
         DeterminerWord,   
@@ -35,6 +37,9 @@ namespace Tokenizer {
         AdverbWord,    
         LocationWord,    
         ConditionWord,    
+        RelativeClauseWord,
+        ConjunctionWord,
+        PunctuationWord,
 
         // Misc
         Unknown    }

@@ -3,16 +3,18 @@
         static void Main() {
             List<string> testCases = new List<string>();
 
-            // testCases.Add("The brave hero fights the dragon in the dark forest.");
-            // testCases.Add("A wizard discovers a cave while the moon rises.");
-            testCases.Add("The knight who rides a horse rescues the princess and the knight finds the treasure.");
-            // testCases.Add("The brave hero fights the dragon in the dark forest.");
-            // testCases.Add("The the the the the knight");
+            testCases.Add("The mighty hero fights the dragon in the dark forest.");
+            testCases.Add("A brave old knight who rescues villager rides.");
+            testCases.Add("The wizard discovers treasure in the cave.");
+            testCases.Add("The princess holds the sword quickly.");
+            testCases.Add("The brave knight protects the king with honor.");
 
+            Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Phase 1:");
 
             PhaseOne(testCases);
             
+            Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Phase 2:");
 
             PhaseTwo(testCases);
@@ -33,12 +35,11 @@
         }
 
         public static void PhaseTwo(List<string> testCases) {
-            Deriver dr = new Deriver();
-            foreach (var test in testCases) {
-                Console.WriteLine($"Test case: {test}");
-                var derivation = dr.Derive(test);
-                foreach (var step in derivation)
-                Console.WriteLine("=> " + step);
+            foreach (var input in testCases) {
+                var tokens = Tokenizer.Tokenize(input);
+                var parser = new Parser(tokens);
+                Console.WriteLine($"\n\nTest: {input}");
+                parser.Derive();
             }
         }
     }

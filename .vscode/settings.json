@@ -1,0 +1,7 @@
+{
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "csharp.format.braces": "nextLine",
+    "csharp.format.newLine.beforeOpenBrace": "none"
+}

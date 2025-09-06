@@ -1,11 +1,13 @@
 // I used Ai to store every lexemes into HashSets Determiners to make life easier.
 // using HashSets instead of string arrays because they have O(1) lookup times instead
 // of arrays which have O(n) because you have to iterate througt every index.
-namespace Tokenizer {
-    public static class CFG {
+namespace Tokenizer
+{
+    public static class CFG
+    {
         // Determiners
         public static readonly HashSet<string> Determiners =
-            new() { "The", "A", "An", "My", "Her", "His", "a" , "the", "an", "my", "her", "his",};
+            new() { "The", "A", "An", "My", "Her", "His", "a", "the", "an", "my", "her", "his", };
         // Adjectives
         public static readonly HashSet<string> Adjectives =
             new() { "brave", "old", "young", "rusty", "enchanted", "mighty" };
@@ -23,6 +25,9 @@ namespace Tokenizer {
         public static readonly HashSet<string> Prepositions =
             new() { "in", "on", "at", "under", "inside",
                     "near", "above", "beside" };
+        // RelativeClause
+        public static readonly HashSet<string> RelativeClauses = 
+            new() { "who" };
         // Adverbials
         public static readonly HashSet<string> Adverbials =
             new() { "while the moon rises", "quickly", "silently", "with care", "without warning", "before the sun sets" };
@@ -38,6 +43,8 @@ namespace Tokenizer {
         // Conjunctions
         public static readonly HashSet<string> Conjunctions =
             new() { "and", "but", "then", "while" };
+        public static readonly HashSet<string> RelativeClause = 
+            new() { "who" };
         // Punctuation
         public static readonly HashSet<string> Punctuation =
             new() { ".", ",", "!", "?" };
