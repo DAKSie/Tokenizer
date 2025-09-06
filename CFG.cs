@@ -1,89 +1,123 @@
-/*
- * Project: Tokenizer CFG
- * Author: Rico Euma O. Aban
- *
- * Description:
- * The CFG (Context-Free Grammar) class defines the vocabulary and categories
- * of words used by the Tokenizer and Parser. Each `HashSet<string>` represents
- * a terminal category such as determiners, nouns, verbs, adjectives, etc.
- * 
- * This acts as the lexical dictionary for the parsing process.
- */
-
 namespace Tokenizer {
+    /// <summary>
+    /// Defines the Context-Free Grammar (CFG) terminals for the story language.
+    /// Each category corresponds to a lexical class of tokens (e.g., Determiners, Nouns).
+    /// These sets are used by the tokenizer to classify input words and phrases.
+    /// </summary>
     public static class CFG {
-        // ---------------------
-        // Lexical Categories
-        // ---------------------
-
         /// <summary>
-        /// Words functioning as determiners (e.g., "the", "a", "my").
+        /// <Determiner> ::= "The" | "A" | "An" | "My" | "Her" | "His"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Determiners =
-            new() { "The", "A", "An", "My", "Her", "His", "a", "the", "an", "my", "her", "his" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "The", "A", "An", "My", "Her", "His", 
+                "the", "a", "an", "my", "her", "his" 
+            };
 
         /// <summary>
-        /// Words functioning as adjectives (e.g., "brave", "enchanted").
+        /// <Adjective> ::= "brave" | "old" | "young" | "rusty" | "enchanted" | "mighty" | "dark"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Adjectives =
-            new() { "brave", "old", "young", "rusty", "enchanted", "mighty", "dark" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "brave", "old", "young", "rusty", "enchanted", "mighty", "dark" 
+            };
 
         /// <summary>
-        /// Words functioning as nouns (e.g., "hero", "dragon", "castle").
+        /// <Noun> ::= "hero" | "wizard" | "knight" | "dragon" | "princess" 
+        ///          | "treasure" | "cave" | "sword" | "castle" | "villager" 
+        ///          | "horse" | "forest"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Nouns =
-            new() { "hero", "wizard", "knight", "dragon", "princess", 
-                    "treasure", "cave", "sword", "castle", "villager", 
-                    "horse", "forest", "dragon" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "hero", "wizard", "knight", "dragon", "princess", 
+                "treasure", "cave", "sword", "castle", "villager", 
+                "horse", "forest" 
+            };
 
         /// <summary>
-        /// Words functioning as verbs (e.g., "fights", "searches").
+        /// <Verb> ::= "fights" | "searches for" | "rescues" | "discovers" 
+        ///          | "rides" | "finds" | "opens" | "calls" | "holds" | "protects"
+        /// Supports both single-word and multi-word verbs.
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Verbs =
-            new() { "fights", "searches", "rescues", "discovers", "rides", 
-                    "finds", "opens", "calls", "holds", "protects" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "fights", "searches for", "rescues", "discovers", "rides", 
+                "finds", "opens", "calls", "holds", "protects" 
+            };
 
         /// <summary>
-        /// Words functioning as prepositions (e.g., "in", "on").
+        /// <Preposition> ::= "in" | "on" | "at" | "under" 
+        ///                  | "inside" | "near" | "above" | "beside"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Prepositions =
-            new() { "in", "on", "at", "under", "inside", "near", "above", "beside" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "in", "on", "at", "under", "inside", "near", "above", "beside" 
+            };
 
         /// <summary>
-        /// Words introducing relative clauses (e.g., "who").
+        /// <RelativeClause> ::= "who"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> RelativeClauses = 
-            new() { "who" };
+            new(StringComparer.OrdinalIgnoreCase) { "who" };
 
         /// <summary>
-        /// Words functioning as adverbials (e.g., "quickly", "silently").
+        /// <Adverbial> ::= "quickly" | "silently" | "with care" 
+        ///                | "without warning" | "while the moon rises" 
+        ///                | "before the sun sets"
+        /// Supports both single-word and multi-word adverbials.
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Adverbials =
-            new() { "quickly", "silently", "carefully" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "quickly", "silently", "with care", "without warning", 
+                "while the moon rises", "before the sun sets" 
+            };
 
         /// <summary>
-        /// Words representing locations (e.g., "castle", "forest").
+        /// <Location> ::= "in the dark forest" | "at the castle" 
+        ///               | "on the mountain" | "near the river" 
+        ///               | "inside the cave"
+        /// Always multi-word phrases.
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Locations =
-            new() { "castle", "mountain", "river", "cave", "forest" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "in the dark forest", "at the castle", "on the mountain", 
+                "near the river", "inside the cave" 
+            };
 
         /// <summary>
-        /// Words expressing conditions or states (e.g., "brave", "sleeps").
+        /// <Condition> ::= "because he is brave" | "because she is clever" 
+        ///                | "if the door is unlocked" | "if the dragon sleeps"
+        ///                | "when the knight calls"
+        /// Always multi-word phrases.
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Conditions =
-            new() { "brave", "clever", "unlocked", "sleeps" };
+            new(StringComparer.OrdinalIgnoreCase) { 
+                "because he is brave", "because she is clever", 
+                "if the door is unlocked", "if the dragon sleeps",
+                "when the knight calls" 
+            };
 
         /// <summary>
-        /// Words functioning as conjunctions (e.g., "and", "but").
+        /// <Conjunction> ::= "and" | "but" | "then" | "while"
+        /// Case-insensitive.
         /// </summary>
         public static readonly HashSet<string> Conjunctions =
-            new() { "and", "but", "then", "while" };
+            new(StringComparer.OrdinalIgnoreCase) { "and", "but", "then", "while" };
 
         /// <summary>
-        /// Punctuation symbols recognized as tokens.
+        /// <Punctuation> ::= "." | "," | "!" | "?"
         /// </summary>
         public static readonly HashSet<string> Punctuation =
-            new() { ".", ",", "!", "?" };
+            new(StringComparer.OrdinalIgnoreCase) { ".", ",", "!", "?" };
     }
 }
 

@@ -1,30 +1,25 @@
-/*
- * Project: Tokenizer Parser
- * Author: Rico Euma O. Aban
- *
- * Description:
- * The Parser is a recursive descent parser that takes a list of tokens
- * (produced by the Tokenizer) and attempts to validate them against 
- * a simplified Context-Free Grammar (CFG). It also prints out the 
- * leftmost derivation steps for educational and debugging purposes.
- */
-
 namespace Tokenizer {
+    /// <summary>
+    /// A recursive descent parser for the given grammar.
+    /// It consumes a list of tokens produced by the Tokenizer
+    /// and prints leftmost derivations as it parses.
+    /// </summary>
     public class Parser {
-        private readonly List<Token> tokens;       // List of tokens provided by the Tokenizer
-        private int tokenPosition = 0;             // Current position in the token stream
-        private List<object> currentDerivation = new List<object>(); // Tracks ongoing derivation steps
+        private readonly List<Token> tokens;   // Input tokens from the tokenizer
+        private int tokenPosition = 0;         // Current index in the token list
+        private List<object> currentDerivation = new List<object>(); // Tracks current derivation for printing
 
         /// <summary>
-        /// Initializes a new parser with a token sequence.
+        /// Initializes the parser with a sequence of tokens.
         /// </summary>
         public Parser(List<Token> tokens) {
             this.tokens = tokens;
         }
 
         /// <summary>
-        /// Entry point for parsing. Starts derivation from <Story> and 
-        /// attempts to fully parse the token sequence.
+        /// Entry point for parsing.
+        /// Starts with <Story> and attempts to derive a valid parse.
+        /// Prints each step of the derivation.
         /// </summary>
         public void Derive() {
             Console.WriteLine("<Story>");
@@ -34,18 +29,25 @@ namespace Tokenizer {
             try {
                 ParseSentence();
                 
-                // Ensure all tokens are consumed
+                // Handle remaining tokens (Extra or punctuation at the end)
                 if (tokenPosition < tokens.Count) {
-                    throw new Exception($"Unexpected tokens remaining: {string.Join(" ", tokens.Skip(tokenPosition).Select(t => t.Value))}");
+                    while (tokenPosition < tokens.Count) {
+                        if (LookaheadIs(TokenType.Location) || LookaheadIs(TokenType.Condition) || 
+                            LookaheadIs(TokenType.Adverbial) || LookaheadIs(TokenType.Punctuation)) {
+                            ParseExtra();
+                        } else {
+                            throw new Exception($"e = {string.Join(" ", tokens.Skip(tokenPosition).Select(t => t.Value))}");
+                        }
+                    }
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine($"Someone Didn't Read the Grammar Rules: {ex.Message}");
+                Console.WriteLine($"e = {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Parses a <Sentence> → <SimpleSentence>.
+        /// <Sentence> ::= <SimpleSentence>
         /// </summary>
         private void ParseSentence() {
             ExpandNonTerminal(TokenType.Sentence, new List<object> { TokenType.SimpleSentence });
@@ -53,7 +55,7 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses a <SimpleSentence> → <Subject> <VerbPhrase> <Extra>.
+        /// <SimpleSentence> ::= <Subject> <VerbPhrase> <Extra>
         /// </summary>
         private void ParseSimpleSentence() {
             ExpandNonTerminal(TokenType.SimpleSentence, new List<object> { TokenType.Subject, TokenType.VerbPhrase, TokenType.Extra });
@@ -63,7 +65,7 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses a <Subject> → <NounPhrase>.
+        /// <Subject> ::= <NounPhrase>
         /// </summary>
         private void ParseSubject() {
             ExpandNonTerminal(TokenType.Subject, new List<object> { TokenType.NounPhrase });
@@ -71,10 +73,10 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses a <NounPhrase> depending on its structure:
-        ///     Determiner AdjectiveList Noun
-        ///     AdjectiveList Noun
-        ///     Noun
+        /// <NounPhrase> ::= 
+        ///   <Determiner> <AdjectiveList> <Noun>
+        /// | <AdjectiveList> <Noun>
+        /// | <Noun>
         /// </summary>
         private void ParseNounPhrase() {
             if (LookaheadIs(TokenType.Determiner)) {
@@ -98,7 +100,10 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses an <AdjectiveList> recursively or epsilon (empty).
+        /// <AdjectiveList> ::= 
+        ///   <Adjective> <AdjectiveList>
+        /// | ε
+        /// (Recursive rule)
         /// </summary>
         private void ParseAdjectiveList() {
             if (LookaheadIs(TokenType.Adjective)) {
@@ -112,7 +117,9 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses a <VerbPhrase>, optionally followed by an <Object> and <Extra>.
+        /// <VerbPhrase> ::= 
+        ///   <Verb> <Object> <Extra>
+        /// | <Verb> <Extra>
         /// </summary>
         private void ParseVerbPhrase() {
             if (LookaheadIs(TokenType.Verb)) {
@@ -125,8 +132,9 @@ namespace Tokenizer {
                     ParseExtra();
                 }
                 else {
-                    ExpandNonTerminal(TokenType.VerbPhrase, new List<object> { TokenType.Verb });
+                    ExpandNonTerminal(TokenType.VerbPhrase, new List<object> { TokenType.Verb, TokenType.Extra });
                     Consume(TokenType.Verb);
+                    ParseExtra();
                 }
             }
             else {
@@ -135,7 +143,7 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses an <Object> → <NounPhrase>.
+        /// <Object> ::= <NounPhrase>
         /// </summary>
         private void ParseObject() {
             ExpandNonTerminal(TokenType.Object, new List<object> { TokenType.NounPhrase });
@@ -143,12 +151,29 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Parses optional <Extra> → <Adverbial> or epsilon.
+        /// <Extra> ::= 
+        ///   <Location> 
+        /// | <Condition> 
+        /// | <Adverbial> 
+        /// | <Punctuation> 
+        /// | ε
         /// </summary>
         private void ParseExtra() {
-            if (LookaheadIs(TokenType.Adverbial)) {
+            if (LookaheadIs(TokenType.Location)) {
+                ExpandNonTerminal(TokenType.Extra, new List<object> { TokenType.Location });
+                Consume(TokenType.Location);
+            }
+            else if (LookaheadIs(TokenType.Condition)) {
+                ExpandNonTerminal(TokenType.Extra, new List<object> { TokenType.Condition });
+                Consume(TokenType.Condition);
+            }
+            else if (LookaheadIs(TokenType.Adverbial)) {
                 ExpandNonTerminal(TokenType.Extra, new List<object> { TokenType.Adverbial });
                 Consume(TokenType.Adverbial);
+            }
+            else if (LookaheadIs(TokenType.Punctuation)) {
+                ExpandNonTerminal(TokenType.Extra, new List<object> { TokenType.Punctuation });
+                Consume(TokenType.Punctuation);
             }
             else {
                 ExpandNonTerminal(TokenType.Extra, new List<object>()); // epsilon
@@ -156,12 +181,12 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Expands a non-terminal in the derivation sequence into its production rule.
+        /// Replaces a non-terminal in the current derivation with a production.
         /// </summary>
         private void ExpandNonTerminal(TokenType nonTerminal, List<object> production) {
             int index = FindNonTerminalInDerivation(nonTerminal);
             if (index == -1) {
-                throw new Exception($"Could not find non-terminal {nonTerminal} in derivation");
+                throw new Exception($"non-terminal missing {nonTerminal}");
             }
 
             currentDerivation.RemoveAt(index);
@@ -170,7 +195,7 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Locates the position of a non-terminal in the current derivation.
+        /// Finds a non-terminal in the current derivation sequence.
         /// </summary>
         private int FindNonTerminalInDerivation(TokenType nonTerminal) {
             for (int i = 0; i < currentDerivation.Count; i++) {
@@ -182,7 +207,8 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Checks ahead in the tokens to determine if a verb has an object.
+        /// Checks ahead to see if the next tokens form an <Object>.
+        /// Helps decide between <Verb> <Object> and <Verb> only.
         /// </summary>
         private bool HasObjectAfterCurrentVerb() {
             int tempPos = tokenPosition + 1;
@@ -193,8 +219,11 @@ namespace Tokenizer {
                     token.Type == TokenType.Noun) {
                     return true;
                 }
-                if (token.Type == TokenType.Adverbial || 
-                    token.Type == TokenType.Punctuation) {
+                if (token.Type == TokenType.Location || 
+                    token.Type == TokenType.Condition ||
+                    token.Type == TokenType.Adverbial ||
+                    token.Type == TokenType.Punctuation ||
+                    token.Type == TokenType.Verb) {
                     return false;
                 }
                 tempPos++;
@@ -203,19 +232,19 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Checks whether the next token matches the expected type.
+        /// Checks if the current token matches a given type.
         /// </summary>
         private bool LookaheadIs(TokenType type) {
             return tokenPosition < tokens.Count && tokens[tokenPosition].Type == type;
         }
 
         /// <summary>
-        /// Consumes a token if it matches the expected type.
-        /// Throws an exception if the match fails.
+        /// Consumes a token of the expected type and updates the derivation.
+        /// Throws an exception if the token does not match.
         /// </summary>
         private void Consume(TokenType expectedType) {
             if (tokenPosition >= tokens.Count) {
-                throw new Exception($"Unexpected end of input, expected {expectedType}");
+                throw new Exception($"expected {expectedType}");
             }
 
             Token current = tokens[tokenPosition];
@@ -223,10 +252,9 @@ namespace Tokenizer {
                 throw new Exception($"Expected {expectedType}, but found {current.Type} '{current.Value}' at position {tokenPosition}");
             }
 
-            // Replace terminal with actual token in derivation
             int index = FindTerminalInDerivation(expectedType);
             if (index == -1) {
-                throw new Exception($"Could not find terminal {expectedType} in derivation");
+                throw new Exception($"terminal missing {expectedType}");
             }
 
             currentDerivation[index] = $"\"{current.Value}\"";
@@ -235,7 +263,7 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Finds the location of a terminal symbol in the current derivation.
+        /// Finds a terminal symbol in the current derivation sequence.
         /// </summary>
         private int FindTerminalInDerivation(TokenType terminal) {
             for (int i = 0; i < currentDerivation.Count; i++) {
@@ -247,7 +275,9 @@ namespace Tokenizer {
         }
 
         /// <summary>
-        /// Prints the current derivation sequence in readable form.
+        /// Prints the current state of the derivation.
+        /// Non-terminals are shown in angle brackets.
+        /// Terminals are shown as quoted strings.
         /// </summary>
         private void PrintDerivation() {
             Console.WriteLine("=> " + string.Join(" ", currentDerivation.Select(item =>
