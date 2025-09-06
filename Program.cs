@@ -7,7 +7,7 @@
             testCases.Add("A brave old knight who rescues villager rides.");
             testCases.Add("The wizard discovers treasure in the cave.");
             testCases.Add("The princess holds the sword quickly.");
-            testCases.Add("The brave knight protects the king with honor.");
+            testCases.Add("The brave knight protects the wizard quickly");
 
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Phase 1:");
