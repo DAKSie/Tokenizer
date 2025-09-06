@@ -5,9 +5,9 @@
 
             testCases.Add("The brave hero fights the dragon in the dark forest.");
             testCases.Add("A wizard discovers a cave while the moon rises.");
-            // testCases.Add("The knight who rides a horse rescues the princess and then finds the treasure.");
+            testCases.Add("The knight who rides a horse rescues the princess and then finds the treasure.");
             testCases.Add("The brave hero fights the dragon in the dark forest.");
-            testCases.Add("The the the the the knight");
+            // testCases.Add("The the the the the knight");
 
             Console.WriteLine("Phase 1:");
 
