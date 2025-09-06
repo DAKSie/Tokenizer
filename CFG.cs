@@ -1,52 +1,89 @@
-// I used Ai to store every lexemes into HashSets Determiners to make life easier.
-// using HashSets instead of string arrays because they have O(1) lookup times instead
-// of arrays which have O(n) because you have to iterate througt every index.
-namespace Tokenizer
-{
-    public static class CFG
-    {
-        // Determiners
+/*
+ * Project: Tokenizer CFG
+ * Author: Rico Euma O. Aban
+ *
+ * Description:
+ * The CFG (Context-Free Grammar) class defines the vocabulary and categories
+ * of words used by the Tokenizer and Parser. Each `HashSet<string>` represents
+ * a terminal category such as determiners, nouns, verbs, adjectives, etc.
+ * 
+ * This acts as the lexical dictionary for the parsing process.
+ */
+
+namespace Tokenizer {
+    public static class CFG {
+        // ---------------------
+        // Lexical Categories
+        // ---------------------
+
+        /// <summary>
+        /// Words functioning as determiners (e.g., "the", "a", "my").
+        /// </summary>
         public static readonly HashSet<string> Determiners =
-            new() { "The", "A", "An", "My", "Her", "His", "a", "the", "an", "my", "her", "his", };
-        // Adjectives
+            new() { "The", "A", "An", "My", "Her", "His", "a", "the", "an", "my", "her", "his" };
+
+        /// <summary>
+        /// Words functioning as adjectives (e.g., "brave", "enchanted").
+        /// </summary>
         public static readonly HashSet<string> Adjectives =
-            new() { "brave", "old", "young", "rusty", "enchanted", "mighty" };
-        // Nouns
+            new() { "brave", "old", "young", "rusty", "enchanted", "mighty", "dark" };
+
+        /// <summary>
+        /// Words functioning as nouns (e.g., "hero", "dragon", "castle").
+        /// </summary>
         public static readonly HashSet<string> Nouns =
-            new() { "hero", "wizard", "knight", "dragon",
-                    "princess", "treasure", "cave", "sword",
-                    "castle", "villager", "horse" };
-        // Verbs
+            new() { "hero", "wizard", "knight", "dragon", "princess", 
+                    "treasure", "cave", "sword", "castle", "villager", 
+                    "horse", "forest", "dragon" };
+
+        /// <summary>
+        /// Words functioning as verbs (e.g., "fights", "searches").
+        /// </summary>
         public static readonly HashSet<string> Verbs =
-            new() { "fights", "searches for", "rescues",
-                    "discovers", "rides", "finds",
-                    "opens", "calls" };
-        // Prepositions
+            new() { "fights", "searches", "rescues", "discovers", "rides", 
+                    "finds", "opens", "calls", "holds", "protects" };
+
+        /// <summary>
+        /// Words functioning as prepositions (e.g., "in", "on").
+        /// </summary>
         public static readonly HashSet<string> Prepositions =
-            new() { "in", "on", "at", "under", "inside",
-                    "near", "above", "beside" };
-        // RelativeClause
+            new() { "in", "on", "at", "under", "inside", "near", "above", "beside" };
+
+        /// <summary>
+        /// Words introducing relative clauses (e.g., "who").
+        /// </summary>
         public static readonly HashSet<string> RelativeClauses = 
             new() { "who" };
-        // Adverbials
+
+        /// <summary>
+        /// Words functioning as adverbials (e.g., "quickly", "silently").
+        /// </summary>
         public static readonly HashSet<string> Adverbials =
-            new() { "while the moon rises", "quickly", "silently", "with care", "without warning", "before the sun sets" };
-        // Locations
+            new() { "quickly", "silently", "carefully" };
+
+        /// <summary>
+        /// Words representing locations (e.g., "castle", "forest").
+        /// </summary>
         public static readonly HashSet<string> Locations =
-            new() { "at the castle", "on the mountain",
-                    "near the river", "inside the cave", "in the dark forest" };
-        // Conditions
+            new() { "castle", "mountain", "river", "cave", "forest" };
+
+        /// <summary>
+        /// Words expressing conditions or states (e.g., "brave", "sleeps").
+        /// </summary>
         public static readonly HashSet<string> Conditions =
-            new() { "because he is brave", "because she is clever",
-                    "if the door is unlocked", "if the dragon sleeps",
-                    "when the knight calls" };
-        // Conjunctions
+            new() { "brave", "clever", "unlocked", "sleeps" };
+
+        /// <summary>
+        /// Words functioning as conjunctions (e.g., "and", "but").
+        /// </summary>
         public static readonly HashSet<string> Conjunctions =
             new() { "and", "but", "then", "while" };
-        public static readonly HashSet<string> RelativeClause = 
-            new() { "who" };
-        // Punctuation
+
+        /// <summary>
+        /// Punctuation symbols recognized as tokens.
+        /// </summary>
         public static readonly HashSet<string> Punctuation =
             new() { ".", ",", "!", "?" };
     }
 }
+

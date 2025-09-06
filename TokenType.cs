@@ -1,20 +1,38 @@
+/*
+ * Project: Tokenizer Token Types
+ * Author: Rico Euma O. Aban
+ *
+ * Description:
+ * The TokenType enumeration defines all possible categories of tokens.
+ * It distinguishes between higher-level grammar structures (non-terminals),
+ * word categories (parts of speech), terminal words, and special cases.
+ */
+
 namespace Tokenizer {
     public enum TokenType {
-        // Sentence structure
+        // ---------------------
+        // High-level structures
+        // ---------------------
         Sentence,
         CompoundSentence,
         SimpleSentence,
         Story,
 
+        // ---------------------
         // Phrase types
+        // ---------------------
         NounPhrase,
         VerbPhrase,
         RelativeClause,
         PrepositionalPhrase,
         Object,
         Extra,
+        Subject,
+        AdjectiveList,
 
+        // ---------------------
         // Word categories
+        // ---------------------
         Determiner,
         Adjective,
         Noun,
@@ -25,10 +43,10 @@ namespace Tokenizer {
         Condition,
         Conjunction,
         Punctuation,
-        Subject,
-        AdjectiveList,
 
-        // Terminals (keywords/literals)
+        // ---------------------
+        // Terminal symbols
+        // ---------------------
         DeterminerWord,   
         AdjectiveWord,            
         NounWord,              
@@ -41,6 +59,10 @@ namespace Tokenizer {
         ConjunctionWord,
         PunctuationWord,
 
-        // Misc
-        Unknown    }
+        // ---------------------
+        // Miscellaneous
+        // ---------------------
+        Unknown    
+    }
 }
+

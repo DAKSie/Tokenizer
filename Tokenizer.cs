@@ -1,107 +1,57 @@
+/*
+ * Project: Tokenizer Lexical Analyzer
+ * Author: Rico Euma O. Aban
+ *
+ * Description:
+ * The Tokenizer (lexer) converts a raw input string into a sequence of tokens. 
+ * It identifies the token type for each word by checking against the CFG 
+ * (Context-Free Grammar) definitions. It also separates punctuation into 
+ * individual tokens.
+ */
+
 namespace Tokenizer {
     public static class Tokenizer {
+        /// <summary>
+        /// Splits input text into a list of tokens (words + punctuation).
+        /// </summary>
         public static List<Token> Tokenize(string input) {
             var tokens = new List<Token>();
-            var words = SplitInput(input);
+            var words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             
-            for (int i = 0; i < words.Count; i++) {
-                string word = words[i];
-
-                // Multiu Word Tokens (verbs, adverbials, locations, conditions)
-                string multi = TryMatchMulti(words, i, CFG.Verbs);
-                if (multi != null) {
-                    tokens.Add(new Token(multi, TokenType.Verb));
-                    i += multi.Split(' ').Length - 1;
-                    continue;
-                }
-                multi = TryMatchMulti(words, i, CFG.Adverbials);
-                if (multi != null) {
-                    tokens.Add(new Token(multi, TokenType.Adverbial));
-                    i += multi.Split(' ').Length - 1;
-                    continue;
-                }
-                multi = TryMatchMulti(words, i, CFG.Locations);
-                if (multi != null) {
-                    tokens.Add(new Token(multi, TokenType.Location));
-                    i += multi.Split(' ').Length - 1;
-                    continue;
-                }
-                multi = TryMatchMulti(words, i, CFG.Conditions);
-                if (multi != null) {
-                    tokens.Add(new Token(multi, TokenType.Condition));
-                    i += multi.Split(' ').Length - 1;
-                    continue;
-                }
-                multi = TryMatchMulti(words, i, new HashSet<string> { "and then" });
-                if (multi != null) {
-                    tokens.Add(new Token(multi, TokenType.Conjunction));
-                    i += multi.Split(' ').Length - 1;
-                    continue;
-                }
-
-                // Single word tokens
+            foreach (var word in words) {
+                // Strip punctuation temporarily
+                string cleanWord = word.Trim().TrimEnd('.', ',', '!', '?');
                 
-                if (CFG.Determiners.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Determiner));
-                else if (CFG.Adjectives.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Adjective));
-                else if (CFG.Nouns.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Noun));
-                else if (word == "who")
-                    tokens.Add(new Token(word, TokenType.RelativeClause));
-                else if (CFG.Prepositions.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Preposition));
-                else if (CFG.Conjunctions.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Conjunction));
-                else if (CFG.Punctuation.Contains(word))
-                    tokens.Add(new Token(word, TokenType.Punctuation));
-                else
-                    tokens.Add(new Token(word, TokenType.Unknown));
+                // Assign token type using CFG
+                TokenType type = GetTokenType(cleanWord);
+                tokens.Add(new Token(cleanWord, type));
+                
+                // If the word ended with punctuation, add it as a separate token
+                if (word.EndsWith('.') || word.EndsWith(',') || word.EndsWith('!') || word.EndsWith('?')) {
+                    tokens.Add(new Token(word[^1..], TokenType.Punctuation));
                 }
+            }
+            
             return tokens;
         }
 
-        private static List<string> SplitInput(string input) {
-            // Splitting with space as delimitter
-            // Also separating punctuations in our grammar
-
-            var result = new List<string>();
-            var parts = input.Split(' ');
-
-            foreach (var part in parts) {
-                string p = part.Trim();
-
-                if (string.IsNullOrEmpty(p)) continue;
-
-                foreach (var punct in CFG.Punctuation) {
-                    if (p.EndsWith(punct)) {
-                        string w = p.Substring(0, p.Length - punct.Length);
-                        if (!string.IsNullOrEmpty(w)) result.Add(w);
-                        result.Add(punct);
-                        goto Next;
-                    }
-                }
-                result.Add(p);
-                Next:; 
-            }
-            return result;
-        }
-
-        // this fucntion will try to see if the multi words tokens match anything in the test cases
-        public static string TryMatchMulti(List<string> words, int start, HashSet<string> options) {
-            foreach (var opt in options) {
-                var optWords = opt.Split(' ');
-                if (start + optWords.Length > words.Count) continue;
-                bool match = true;
-                for (int j = 0; j < optWords.Length; j++) {
-                    if (!string.Equals(words[start + j], optWords[j], StringComparison.OrdinalIgnoreCase)) {
-                        match = false;
-                        break;
-                    }
-                }
-                if (match) return opt;
-            }
-            return null;
+        /// <summary>
+        /// Determines the token type for a given word by checking 
+        /// the CFG word sets. If no match is found, assigns Unknown.
+        /// </summary>
+        private static TokenType GetTokenType(string word) {
+            if (CFG.Determiners.Contains(word)) return TokenType.Determiner;
+            if (CFG.Adjectives.Contains(word)) return TokenType.Adjective;
+            if (CFG.Nouns.Contains(word)) return TokenType.Noun;
+            if (CFG.Verbs.Contains(word)) return TokenType.Verb;
+            if (CFG.Prepositions.Contains(word)) return TokenType.Preposition;
+            if (CFG.Adverbials.Contains(word)) return TokenType.Adverbial;
+            if (CFG.Locations.Contains(word)) return TokenType.Location;
+            if (CFG.Conditions.Contains(word)) return TokenType.Condition;
+            if (CFG.RelativeClauses.Contains(word)) return TokenType.RelativeClause;
+            if (CFG.Conjunctions.Contains(word)) return TokenType.Conjunction;
+            
+            return TokenType.Unknown;
         }
     }
 }
