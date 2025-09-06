@@ -32,6 +32,12 @@ namespace Tokenizer {
                     i += multi.Split(' ').Length - 1;
                     continue;
                 }
+                multi = TryMatchMulti(words, i, new HashSet<string> { "and then" });
+                if (multi != null) {
+                    tokens.Add(new Token(multi, TokenType.Conjunction));
+                    i += multi.Split(' ').Length - 1;
+                    continue;
+                }
 
                 // Single word tokens
                 

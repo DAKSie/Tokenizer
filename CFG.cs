@@ -25,17 +25,16 @@ namespace Tokenizer {
                     "near", "above", "beside" };
         // Adverbials
         public static readonly HashSet<string> Adverbials =
-            new() { "while the moon rises", "quickly", "silently", "with care", "without warning" };
+            new() { "while the moon rises", "quickly", "silently", "with care", "without warning", "before the sun sets" };
         // Locations
         public static readonly HashSet<string> Locations =
-            new() { "before the sun sets",
-                    "at the castle", "on the mountain",
+            new() { "at the castle", "on the mountain",
                     "near the river", "inside the cave", "in the dark forest" };
         // Conditions
         public static readonly HashSet<string> Conditions =
             new() { "because he is brave", "because she is clever",
                     "if the door is unlocked", "if the dragon sleeps",
-                    "when the knight calls", "while" };
+                    "when the knight calls" };
         // Conjunctions
         public static readonly HashSet<string> Conjunctions =
             new() { "and", "but", "then", "while" };
