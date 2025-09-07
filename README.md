@@ -109,7 +109,11 @@ dotnet run
 
 ## Author
 
-Project by **Rico Euma O. Aban**\
+Project by:
+-    **Alle Zayd Busaman**
+-    **Jose Anuada Jr.**
+-    **Tichard Toledo Jr.**
+-    **Rico Euma Aban**\
 Demonstration of **lexer + parser construction** in C# for educational
 purposes.
 
